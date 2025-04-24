@@ -1,0 +1,22 @@
+name: GitHub Dependent Jobs Demo
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+
+on: [push]
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🔧 Running setup..."
+
+  build:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🏗️ Running build..."
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🧪 Running tests..."

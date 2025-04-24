@@ -1,0 +1,40 @@
+name: Job Dependencies and Failure Example
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Run initial tasks for job1
+        run: |
+          echo "Running job 1 tasks..."
+          # halimbawa: npm install
+
+  job2:
+    runs-on: ubuntu-latest
+    needs: job1  # Depende ang job2 sa job1
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Run tasks for job2 (this will fail)
+        run: |
+          echo "Running job 2 tasks..."
+          exit 1  # Ito ay intentionally magfe-fail
+
+  job3:
+    runs-on: ubuntu-latest
+    needs: [job1, job2]  # Depende ang job3 sa job1 at job2
+    if: success()  # mag rrun lang  kung successful ang job1 at job2
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Run tasks for job3
+        run: |
+          echo "Running job 3 tasks..."
+          # halimbawa: npm run build
